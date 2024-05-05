@@ -56,6 +56,41 @@ export default new Router({
           path: 'upgrade',
           component: () => import('@/views/dashboard/Upgrade'),
         },
+        {
+          name: '主页',
+          path: 'MainPage',
+          component: () => import('@/views/dashboard/MainPage.vue'),
+        },
+        {
+          name: '举报管理',
+          path: 'Report',
+          component: () => import('@/views/dashboard/Report.vue'),
+        },
+        {
+          name: '投稿管理',
+          path: 'Contribute',
+          component: () => import('@/views/dashboard/Contribute.vue'),
+        },
+        {
+          name: '人员管理',
+          path: 'Users',
+          component: () => import('@/views/dashboard/Users.vue'),
+        },
+        {
+          name: '文章管理',
+          path: 'Posts',
+          component: () => import('@/views/dashboard/Posts.vue'),
+        },
+        {
+          name: '游戏信息',
+          path: 'Games',
+          component: () => import('@/views/dashboard/Games.vue'),
+        },
+        {
+          name: '新闻发布',
+          path: 'ReleaseNews',
+          component: () => import('@/views/dashboard/ReleaseNews.vue'),
+        },
       ],
     },
   ],
