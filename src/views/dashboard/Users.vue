@@ -1,14 +1,18 @@
 <template>
   <v-container id="user-management" fluid tag="section">
-    <v-text-field
-      v-model="searchTerm"
-      label="搜索用户"
-      prepend-inner-icon="mdi-magnify"
-      clearable
-      outlined
-      dense
-      hide-details
-    />
+    <v-row>
+      <v-col cols="12">
+        <v-text-field
+          v-model="searchTerm"
+          label="Search Users"
+          prepend-inner-icon="mdi-magnify"
+          clearable
+          outlined
+          dense
+          hide-details
+        />
+      </v-col>
+    </v-row>
     <base-material-card icon="mdi-account-multiple" title="人员管理" class="px-5 py-3">
       <v-simple-table>
         <thead>
@@ -23,7 +27,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in users" :key="user.user_id">
+        <tr v-for="user in filteredUsers" :key="user.user_id">
           <td>
             <v-avatar>
               <img :src="user.avatar" alt="Avatar" />
@@ -61,6 +65,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   data() {
     return {
@@ -73,17 +79,30 @@ export default {
       },
     };
   },
+  computed: {
+    filteredUsers() {
+      const searchTerm = this.searchTerm.toLowerCase();
+      return this.users.filter(user =>
+        user.user_nickName.toLowerCase().includes(searchTerm)
+      );
+    },
+  },
   created() {
     this.getUserList();
   },
   methods: {
     getUserList() {
-      fetch('http://127.0.0.1:4523/m1/4252541-0-default/manager/GetUserDetailList/')
-        .then(response => response.json())
-        .then(data => {
-          this.users = data;
+      httpInstance.get('/manager/GetUserDetailList/')
+        .then(response => {
+          response.forEach(user => {
+            this.users.push({
+              user_id: user.user_id,
+              user_nickName: user.user_nickName,
+              avatar: user.profile.img_url
+            });
+          });
         })
-        .catch(error => console.error('Error fetching user list:', error));
+        .catch(error => console.error('Error fetching report list:', error));
     },
     confirmDelete(user) {
       this.deleteDialog.show = true;
@@ -92,19 +111,27 @@ export default {
     },
     deleteUser() {
       const userId = this.deleteDialog.userId;
-      fetch('http://127.0.0.1:4523/m1/4252541-0-default/manager/DeleteUser/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ user_id: userId })
-      })
+      httpInstance.post('/manager/DeleteUser/?user_id=' + userId)
         .then(() => {
           // 从列表中移除该用户
           this.users = this.users.filter(user => user.user_id !== userId);
           this.deleteDialog.show = false;
         })
         .catch(error => console.error('Error deleting user:', error));
+    },
+    search() {
+      httpInstance.get('/manager/GetUserDetailList/')
+        .then(response => {
+          this.users=[];
+          response.forEach(user => {
+            this.users.push({
+              user_id: user.user_id,
+              user_nickName: user.user_nickName,
+              avatar: user.profile.img_url
+            });
+          });
+        })
+        .catch(error => console.error('Error fetching report list:', error));
     },
   },
 };

@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import httpInstance from '@/utils/axios';
+import axios from "axios";
 export default {
   data() {
     return {
@@ -93,10 +94,19 @@ export default {
   methods: {
     getReportList() {
       // 使用你的实际接口来获取举报列表数据
-      fetch('http://127.0.0.1:4523/m1/4252541-0-default/manager/GetReportList/')
-        .then(response => response.json())
-        .then(data => {
-          this.reports = data;
+      httpInstance.get('/manager/GetReportList/')
+        .then(response => {
+          console.log(response);
+          response.forEach(report => {
+            this.reports.push({
+              report_id: report.report_id,
+              reporter: report.reporter,
+              reported_user: report.reported_user,
+              report_text: report.report_text,
+              report_time: report.report_time,
+              report_evidence: report.report_evidence.img_url,
+            });
+          });
         })
         .catch(error => console.error('Error fetching report list:', error));
     },
@@ -120,8 +130,10 @@ export default {
         report_id: report.report_id,
         sign: this.reasonDialog.action==='accept' ? 1 : 0,
         feedbackContent: this.reasonDialog.reason,
+        user_id: report.reporter,
       };
-      axios.post('http://127.0.0.1:4523/m1/4252541-0-default/manager/PostFeedbackMessage/', data);
+      httpInstance.post('/manager/PostFeedbackMessage/?report_id='+data.report_id+
+      '&sign='+data.sign+'&feedbackContent='+data.feedbackContent+'&user_id='+data.user_id);
       console.log('Sending data to backend:', data);
 
       // 从列表中移除该举报

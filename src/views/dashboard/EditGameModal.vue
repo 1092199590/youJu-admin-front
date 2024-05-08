@@ -8,12 +8,7 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-file-input
-                v-model="game.coverImage"
-                label="游戏大图"
-                outlined
-                dense
-              ></v-file-input>
+              <v-img :src="game.coverImage" max-height="200" contain></v-img>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -21,6 +16,7 @@
                 label="中文名"
                 outlined
                 dense
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -29,6 +25,7 @@
                 label="英文名"
                 outlined
                 dense
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -38,6 +35,7 @@
                 type="number"
                 outlined
                 dense
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -47,109 +45,113 @@
                 type="number"
                 outlined
                 dense
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-select
-                v-model="game.platforms"
-                :items="platforms"
-                label="平台"
-                outlined
-                dense
-                multiple
-              ></v-select>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="game.description"
-                label="详细介绍"
-                outlined
-                dense
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12">
               <v-combobox
-                v-model="game.tags"
-                :items="allTags"
+                v-model="game.platforms"
+                :items="game.platforms"
                 label="标签"
                 outlined
                 dense
                 multiple
                 chips
-              ></v-combobox>
-            </v-col>
-            <v-col cols="12">
-              <v-menu
-                v-model="releaseMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
+                clearable
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="game.releaseDate"
-                    label="最早发布日期"
-                    prepend-icon="mdi-calendar"
-                    readonly
+                <template v-slot:selection="{ attrs, item, select, selected }">
+                  <v-chip
                     v-bind="attrs"
-                    v-on="on"
-                    outlined
-                    dense
-                  ></v-text-field>
+                    :input-value="selected"
+                    close
+                    @click="select"
+                    @click:close="removeTag(item)"
+                  >
+                    {{ item }}
+                  </v-chip>
                 </template>
-                <v-date-picker
-                  v-model="game.releaseDate"
-                  @input="releaseMenu = false"
-                ></v-date-picker>
-              </v-menu>
+              </v-combobox>
             </v-col>
-            <v-col cols="12">
-              <v-menu
-                v-model="chineseReleaseMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="game.chineseReleaseDate"
-                    label="中文发布日期"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    outlined
-                    dense
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="game.chineseReleaseDate"
-                  @input="chineseReleaseMenu = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="game.developer"
-                label="开发商"
-                outlined
-                dense
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-select
-                v-model="game.languages"
-                :items="languages"
-                label="支持语言"
-                outlined
-                dense
-                multiple
-              ></v-select>
-            </v-col>
+<!--            <v-col cols="12">-->
+<!--              <v-textarea-->
+<!--                v-model="game.description"-->
+<!--                label="详细介绍"-->
+<!--                outlined-->
+<!--                dense-->
+<!--              ></v-textarea>-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-menu-->
+<!--                v-model="releaseMenu"-->
+<!--                :close-on-content-click="false"-->
+<!--                :nudge-right="40"-->
+<!--                transition="scale-transition"-->
+<!--                offset-y-->
+<!--                min-width="auto"-->
+<!--              >-->
+<!--                <template v-slot:activator="{ on, attrs }">-->
+<!--                  <v-text-field-->
+<!--                    v-model="game.releaseDate"-->
+<!--                    label="最早发布日期"-->
+<!--                    prepend-icon="mdi-calendar"-->
+<!--                    readonly-->
+<!--                    v-bind="attrs"-->
+<!--                    v-on="on"-->
+<!--                    outlined-->
+<!--                    dense-->
+<!--                  ></v-text-field>-->
+<!--                </template>-->
+<!--                <v-date-picker-->
+<!--                  v-model="game.releaseDate"-->
+<!--                  @input="releaseMenu = false"-->
+<!--                ></v-date-picker>-->
+<!--              </v-menu>-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-menu-->
+<!--                v-model="chineseReleaseMenu"-->
+<!--                :close-on-content-click="false"-->
+<!--                :nudge-right="40"-->
+<!--                transition="scale-transition"-->
+<!--                offset-y-->
+<!--                min-width="auto"-->
+<!--              >-->
+<!--                <template v-slot:activator="{ on, attrs }">-->
+<!--                  <v-text-field-->
+<!--                    v-model="game.chineseReleaseDate"-->
+<!--                    label="中文发布日期"-->
+<!--                    prepend-icon="mdi-calendar"-->
+<!--                    readonly-->
+<!--                    v-bind="attrs"-->
+<!--                    v-on="on"-->
+<!--                    outlined-->
+<!--                    dense-->
+<!--                  ></v-text-field>-->
+<!--                </template>-->
+<!--                <v-date-picker-->
+<!--                  v-model="game.chineseReleaseDate"-->
+<!--                  @input="chineseReleaseMenu = false"-->
+<!--                ></v-date-picker>-->
+<!--              </v-menu>-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-text-field-->
+<!--                v-model="game.developer"-->
+<!--                label="开发商"-->
+<!--                outlined-->
+<!--                dense-->
+<!--              ></v-text-field>-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-select-->
+<!--                v-model="game.languages"-->
+<!--                :items="languages"-->
+<!--                label="支持语言"-->
+<!--                outlined-->
+<!--                dense-->
+<!--                multiple-->
+<!--              ></v-select>-->
+<!--            </v-col>-->
           </v-row>
         </v-container>
       </v-card-text>
@@ -167,6 +169,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   name: 'EditGameModal',
   props: {
@@ -180,17 +184,30 @@ export default {
       dialog: true,
       releaseMenu: false,
       chineseReleaseMenu: false,
-      platforms: ['PlayStation 4', 'Xbox One', 'PC', 'Nintendo Switch'],
       languages: ['English', '中文', 'Français', 'Deutsch', 'Español'],
-      allTags: ['动作', '冒险', '射击', '角色扮演', '策略', '模拟'],
     };
   },
   methods: {
     saveGame() {
-      this.$emit('save', this.game);
+      // this.$emit('save', this.game);
+      const formData = new FormData();
+      formData.append("game_id",this.game.id);
+      formData.append("GameTagList", this.game.platforms)
+      httpInstance.post('/manager/CreateOrEditGameDetail/', formData)
+        .then(() => {
+          this.$emit('close');
+        })
+        .catch((error) => {
+          console.error('Error saving game:', error);
+        });
+      //刷新
+      
     },
     goBack() {
       this.$emit('close');
+    },
+    removeTag(tag) {
+      this.game.tags = this.game.tags.filter(t => t !== tag);
     },
   },
 };
