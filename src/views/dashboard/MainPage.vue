@@ -104,25 +104,25 @@
         </router-link>
       </v-col>
 
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-      >
-        <router-link
-          to="ReleaseNews"
-          style="text-decoration: none;"
-        >
-          <base-material-stats-card
-            color="cyan"
-            icon="mdi-broadcast"
-            title="新闻发布"
-            value="12 草稿"
-            sub-icon="mdi-check"
-            sub-text="待发布"
-          />
-        </router-link>
-      </v-col>
+<!--      <v-col-->
+<!--        cols="12"-->
+<!--        sm="6"-->
+<!--        md="4"-->
+<!--      >-->
+<!--        <router-link-->
+<!--          to="ReleaseNews"-->
+<!--          style="text-decoration: none;"-->
+<!--        >-->
+<!--          <base-material-stats-card-->
+<!--            color="cyan"-->
+<!--            icon="mdi-broadcast"-->
+<!--            title="新闻发布"-->
+<!--            value="12 草稿"-->
+<!--            sub-icon="mdi-check"-->
+<!--            sub-text="待发布"-->
+<!--          />-->
+<!--        </router-link>-->
+<!--      </v-col>-->
     </v-row>
   </v-container>
 </template>

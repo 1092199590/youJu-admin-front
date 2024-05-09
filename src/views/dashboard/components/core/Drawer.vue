@@ -31,8 +31,8 @@
           contain
         >
           <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
+            src="https://cdn.jsdelivr.net/gh/Lon3Sing/Youju-Pic/logo_text_new.png"
+            max-height="20"
           />
         </v-list-item-avatar>
 
@@ -76,15 +76,7 @@
       <div />
     </v-list>
 
-    <template v-slot:append>
-      <base-item
-        :item="{
-          title: $t('upgrade'),
-          icon: 'mdi-package-up',
-          to: '/upgrade',
-        }"
-      />
-    </template>
+
   </v-navigation-drawer>
 </template>
 
@@ -136,11 +128,11 @@
           title: '游戏信息',
           to: '/Games',
         },
-        {
-          icon: 'mdi-broadcast',
-          title: '新闻发布',
-          to: '/ReleaseNews',
-        },
+        // {
+        //   icon: 'mdi-broadcast',
+        //   title: '新闻发布',
+        //   to: '/ReleaseNews',
+        // },
         // {
         //   icon: 'mdi-view-dashboard',
         //   title: 'dashboard',
